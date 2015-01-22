@@ -5,12 +5,16 @@
     <title>MaDe Editor</title>
     <link rel="stylesheet" href="css/preview.css" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/default.css" />
+    <link rel="stylesheet" href="css/github.css" />
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/made.js"></script>
     <script type="text/javascript" src="js/ace.js"></script>
     <script type="text/javascript" src="js/mode-markdown.js"></script>
     <script type="text/javascript" src="js/theme-twilight.js"></script>
     <script type="text/javascript" src="js/theme-textmate.js"></script> 
+    <script type="text/javascript" src="js/marked.min.js"></script>
+    <script type="text/javascript" src="js/highlight.js"></script>
     <script type="text/javascript" src="js/Markdown.Converter.js"></script>
 </head>
 <body>
@@ -37,6 +41,8 @@
             </li>
         </ul>
         </div>
+        <input id="switch_use_gfm" type="checkbox" class="checkbox" />
+        <label>GFM</label>
     </div>
     <div id="color_scheme"><label>Color Scheme</label>
         <a href="dark" id="color_scheme_dark" class="selected"><span/></a>

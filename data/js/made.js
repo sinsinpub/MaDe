@@ -2,6 +2,7 @@ var converter = null;
 //var md_file = null;
 var FORCE = 1;
 var MODE_FULL = 1;
+var USE_GFM = false;
 var html_begin = '<!DOCTYPE html>\n\
 <html dir="ltr">\n\
     <meta charset="utf-8" />\n\
@@ -22,7 +23,7 @@ function update(mode) {
     if (can_update || mode === FORCE) {
         var source = $.trim(editor.getSession().getValue());
         if (source.lenght != 0) {
-            var html = converter.makeHtml(source);
+        	var html = converter(source);
             $('#preview').html(html);
         }
     }
@@ -49,7 +50,9 @@ function change_theme(theme) {
 
 function save_state() {
     var state = [{name: '', data: editor.getSession().getValue()}];
+    var options = {"useGfm": USE_GFM};
     try {
+    	localStorage.setItem('options', JSON.stringify(options));
         localStorage.setItem('files', JSON.stringify(state));
         //console.log('save state', JSON.stringify(state));
     } catch (e) {
@@ -66,6 +69,14 @@ function resume_state() {
         //console.log('resume state', JSON.stringify(state));
         editor.getSession().setValue(state[0].data);
     }
+	var options = localStorage.getItem('options');
+	if (options) {
+		options = JSON.parse(options);
+		if (options.useGfm) {
+			$('#switch_use_gfm').attr("checked", options.useGfm);
+			switch_renderer();
+		}
+	}
 }
 
 function fake_click(obj) {
@@ -127,6 +138,12 @@ function load_source(file) {
     reader.readAsText(file);
 }
 
+function switch_renderer() {
+	USE_GFM = $('#switch_use_gfm').attr("checked");
+    converter = USE_GFM ? marked : new Markdown.Converter().makeHtml;
+    update(FORCE);
+}
+
 var editor = null;
 var can_update = true;
 $(document).ready(function () {
@@ -176,7 +193,6 @@ $(document).ready(function () {
         return false;
     });
 
-
     $('#export_source_button').click(function () {
         export_source();
         return false;
@@ -186,8 +202,13 @@ $(document).ready(function () {
     }, function () {
         $('#export_menu').slideUp();
     });
+
     $('#export_button').mousedown(function () {
         $('#export_menu').slideDown();
+    });
+
+    $('#switch_use_gfm').click(function() {
+    	switch_renderer();
     });
 
     $('#color_scheme > a').click(function () {
@@ -208,8 +229,19 @@ $(document).ready(function () {
         html_begin = html_begin.replace('{STYLE}', data);
     });
 
-    converter = new Markdown.Converter();
-    update(FORCE);
+    marked.setOptions({
+		gfm: true,
+		tables: true,
+		breaks: false,
+		pedantic: false,
+		sanitize: false,
+		smartLists: true,
+		smartypants: false,
+		highlight: function (code) {
+			return hljs.highlightAuto(code).value;
+    	}
+    });
+    switch_renderer();
     onresize();
     setTimeout(function () {
         change_theme('dark');

@@ -39,6 +39,24 @@ A sample text here. And some code below:
 
 Inline code `printf()` here.
 
+Block code:
+```javascript
+var marked = require('marked');
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  smartLists: true,
+  smartypants: false,
+  highlight: function (code) {
+    return require('highlight.js').highlightAuto(code).value;
+  }
+});
+```
+
 This is a link to [Google](http://google.com).
 
 *single asterisks*
@@ -49,4 +67,13 @@ Create fake iPhone text conversations. Enter a conversation: Example: Dad: Your 
 
 Create fake iPhone text conversations. Enter a conversation: Example: Dad: Your mom and I are going to divorce next month. Son: Why ? Call me please. 
 
+Inline HTML:
+<center>Go to center</center>
 
+GFM Table:
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |

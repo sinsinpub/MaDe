@@ -33,12 +33,20 @@ body {
     right: 180px;
     top: 2px;
     height: 26px;
-    width: 200px;
+    width: 260px;
 }
 #control .button {
     font-size: 12px;
     text-decoration: none;
     color: gray;
+}
+#control .checkbox {
+    vertical-align: middle;
+}
+#control label {
+    color: gray;
+    font-size: 10px;
+    vertical-align: middle;
 }
 #color_scheme {
     position: absolute;
